@@ -5,3 +5,5 @@ classes
 .eclipse
 classes
 out
+
+dependencies/

@@ -63,6 +63,11 @@ test {
     }
 }
 
+task copyDependencies(type: Copy) {
+   from configurations.compile
+   into 'dependencies'
+}
+
 task copyStaticResources(type: Copy) {
     from "${sourceSets.main.resources}/static"
     into "${sourceSets.main.output.resourcesDir}/static"
