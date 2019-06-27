@@ -32,8 +32,8 @@ ext {
     set('springCloudVersion', 'Finchley.SR2')
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_10
-targetCompatibility = JavaVersion.VERSION_1_10
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencyManagement {
     imports {
