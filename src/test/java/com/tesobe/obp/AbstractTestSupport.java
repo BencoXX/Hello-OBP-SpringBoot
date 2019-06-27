@@ -48,39 +48,39 @@ public abstract class AbstractTestSupport {
         SecurityContextHolder.setContext(new SecurityContextImpl(
                 new UsernamePasswordAuthenticationToken(username, token)));
         //a pre-requisite for tests is for the user to have an account
-        createAccountIfNoneExists();
+        //createAccountIfNoneExists();
     }
 
-    private void createAccountIfNoneExists() {
-        User currentUser = obpApiClient.getCurrentUser();
-
-        if(obpApiClient.getPrivateAccountsNoDetails().size() == 0) {
-            //find a bank with at least a branch
-            List<String> bankBranchPair = obpBankMetaApiClient.getBanks().getBanks()
-                    .stream().map(bank -> {
-                        {
-                            try {
-                                List<Branch> branches = obpBankMetaApiClient.getBranches(bank.getId()).getBranches();
-                                return List.of(bank.getId(), branches.get(0).getId());
-                            } catch (Exception e) {
-                                //TODO: fix API not to return 400 if no branches are found for a bank
-                                return Collections.<String>emptyList();
-                            }
-                        }
-                    })
-                    .filter(v -> !v.isEmpty())
-                    .findFirst().get();
-
-            String accountId = UUID.randomUUID().toString();
-            Account accountRequest = new Account();
-            accountRequest.setUserId(currentUser.getUserId());
-            accountRequest.setBranchId(bankBranchPair.get(1));
-            accountRequest.setAccountRouting(new AccountRouting("OBP", "UK123456"));
-            accountRequest.setBalance(Money.zero(CurrencyUnit.EUR));
-            accountRequest.setType("CURRENT");
-            accountRequest.setLabel("Label1");
-            Account account = obpApiClient.createAccount(bankBranchPair.get(0), accountId, accountRequest);
-            Assert.assertNotNull(account);
-        }
-    }
+//    private void createAccountIfNoneExists() {
+//        User currentUser = obpApiClient.getCurrentUser();
+//
+//        if(obpApiClient.getPrivateAccountsNoDetails().size() == 0) {
+//            //find a bank with at least a branch
+//            List<String> bankBranchPair = obpBankMetaApiClient.getBanks().getBanks()
+//                    .stream().map(bank -> {
+//                        {
+//                            try {
+//                                List<Branch> branches = obpBankMetaApiClient.getBranches(bank.getId()).getBranches();
+//                                return List.of(bank.getId(), branches.get(0).getId());
+//                            } catch (Exception e) {
+//                                //TODO: fix API not to return 400 if no branches are found for a bank
+//                                return Collections.<String>emptyList();
+//                            }
+//                        }
+//                    })
+//                    .filter(v -> !v.isEmpty())
+//                    .findFirst().get();
+//
+//            String accountId = UUID.randomUUID().toString();
+//            Account accountRequest = new Account();
+//            accountRequest.setUserId(currentUser.getUserId());
+//            accountRequest.setBranchId(bankBranchPair.get(1));
+//            accountRequest.setAccountRouting(new AccountRouting("OBP", "UK123456"));
+//            accountRequest.setBalance(Money.zero(CurrencyUnit.EUR));
+//            accountRequest.setType("CURRENT");
+//            accountRequest.setLabel("Label1");
+//            Account account = obpApiClient.createAccount(bankBranchPair.get(0), accountId, accountRequest);
+//            Assert.assertNotNull(account);
+//        }
+//    }
 }
